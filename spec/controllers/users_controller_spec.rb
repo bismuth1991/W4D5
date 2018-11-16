@@ -11,6 +11,15 @@ RSpec.describe UsersController, type: :controller do
 
   describe "POST#create" do
     context "with valid username and password" do
+      it 'logs in the user' do
+        post :create, params: {
+          user: {username: 'username', password: 'password' }
+        }
+        user = User.find_by(username: 'username')
+
+        expect(user.session_token).to eq(session[:session_token])
+      end
+
       it "creates a new user and redirects to show page" do
         post :create, params: {
           user: {username: 'username', password: 'password' }
