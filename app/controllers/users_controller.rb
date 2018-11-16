@@ -16,6 +16,16 @@ class UsersController < ApplicationController
     end
   end
 
+  def show
+    @user = User.find(params[:id])
+
+    if @user
+      render :show
+    else
+      redirect_to new_user_url
+    end
+  end
+
   private
 
   def user_params
