@@ -24,13 +24,39 @@ feature 'the signup process' do
 end
 
 feature 'logging in' do
-  scenario 'shows username on the homepage after login'
+  background(:each) do
+    User.create(username: 'Bao', password: 'BaoBao')
+    visit new_session_url
+    fill_in 'Username', with: 'Bao'
+    fill_in 'Password', with: 'BaoBao'
+    click_on 'submit'
+    # save_and_open_page
+  end
+
+  scenario 'shows username on the homepage after login' do
+    expect(page).to have_content('Bao')
+  end
 
 end
 
 feature 'logging out' do
-  scenario 'begins with a logged out state'
+  background(:each) do
+    user = User.create(username: 'Bao', password: 'BaoBao')
 
-  scenario 'doesn\'t show username on the homepage after logout'
+    visit new_session_url
+    fill_in 'Username', with: 'Bao'
+    fill_in 'Password', with: 'BaoBao'
+    click_on 'submit'
+
+    click_on 'Log Out'
+  end
+
+  scenario 'begins with a logged out state' do
+    expect(page).to have_content('Sign in')
+  end
+
+  scenario 'doesn\'t show username on the homepage after logout' do
+    expect(page).to_not have_content('Bao')
+  end
 
 end
